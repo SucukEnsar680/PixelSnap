@@ -18,10 +18,11 @@ namespace PixelSnap
             ImageName = imagename;
             ImagePath = imagepath;
         }
+
         public void DrawImage(ScrollView galleryScrollView)
         {
             double widthInLogicalUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
-            double height = (widthInLogicalUnits) / 4 -8;
+            double height = (widthInLogicalUnits) / 4 - 8;
             FlexLayout flexLayout = (FlexLayout)galleryScrollView.Content;
             galleryScrollView.ZIndex = 0;
 
@@ -38,7 +39,7 @@ namespace PixelSnap
             Frame imageFrame = new Frame
             {
                 WidthRequest = height,
-                HeightRequest = height, 
+                HeightRequest = height,
                 Margin = new Thickness(2, 5, 0, 0),
                 Padding = new Thickness(0),
                 CornerRadius = 0,
@@ -48,7 +49,7 @@ namespace PixelSnap
             Image image = new Image
             {
                 Source = ImageSource.FromFile(ImagePath),
-                WidthRequest = height,   
+                WidthRequest = height,
                 HeightRequest = height,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
@@ -57,7 +58,17 @@ namespace PixelSnap
 
             imageFrame.Content = image;
             flexLayout.Children.Add(imageFrame);
+            imageFrame.GestureRecognizers.Add(new TapGestureRecognizer
+            {
+                Command = new Command(async () =>
+                {
+                    var navigation = Application.Current?.MainPage?.Navigation;
+                    if (navigation != null)
+                    {
+                        await navigation.PushAsync(new Image_Zoomed(ImagePath));
+                    }
+                })
+            });
         }
-
     }
 }
