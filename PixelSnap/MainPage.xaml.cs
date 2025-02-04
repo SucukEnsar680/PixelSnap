@@ -8,9 +8,8 @@
         }
         public async void Gal_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Page_Gallery());
+            await Navigation.PushAsync(new ConvertPage());
         }
-
     }
 
 }

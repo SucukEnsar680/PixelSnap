@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PixelSnap.Image_Zoomed"
+             Title="Image_Zoomed">
+    <Grid>
+        <!-- Top bar with back arrow and menu button -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Button x:Name="Button_GoBack" Grid.Row="0" Grid.Column="0" Text="←" 
+                VerticalOptions="Start" HorizontalOptions="Start"
+                Clicked="OnBackButtonClicked" />
+        <Button Grid.Row="0" Grid.Column="2" Text="⋮" 
+                VerticalOptions="Start" HorizontalOptions="End"
+                Clicked="OnMenuButtonClicked" />
+        <Image x:Name="ZoomedImage" Grid.Row="1" Grid.ColumnSpan="3" 
+               Source="your_image_path_here.jpg"
+               Aspect="AspectFit"
+               VerticalOptions="Center" HorizontalOptions="Center" />
+    </Grid>
+</ContentPage>
