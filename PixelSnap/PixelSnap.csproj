@@ -57,9 +57,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Accord" Version="3.8.0" />
+		<PackageReference Include="Accord.Imaging" Version="3.8.0" />
+		<PackageReference Include="Accord.MachineLearning" Version="3.8.0" />
+		<PackageReference Include="Accord.Math" Version="3.8.0" />
+		<PackageReference Include="Accord.Statistics" Version="3.8.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.1.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="SkiaSharp" Version="3.116.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="CameraViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
