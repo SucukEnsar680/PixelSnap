@@ -60,6 +60,7 @@
 	  <None Remove="Resources\Images\icon.png" />
 	  <None Remove="Resources\Images\imageremovebg.png" />
 	  <None Remove="Resources\Images\kreis.png" />
+	  <None Remove="Resources\Images\pfeilSchwarz.png" />
 	  <None Remove="Resources\Images\pixel1.png" />
 	  <None Remove="Resources\Images\pixelsnap1.png" />
 	  <None Remove="Resources\Images\rectangle20.png" />

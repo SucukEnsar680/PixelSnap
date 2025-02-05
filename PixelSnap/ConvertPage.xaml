@@ -3,14 +3,77 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PixelSnap.ConvertPage"
              Title="ConvertPage">
-    <Grid>
+
+        
+    <Grid RowDefinitions="Auto, *, Auto" BackgroundColor="Black">
+
+        <StackLayout Orientation="Horizontal" Padding="5,0,0,0" Grid.Row="0">
+            <Image Source="imageremovebg.png" HeightRequest="15" WidthRequest="15" VerticalOptions="Start"/>
+            <Label Text="PixelSnap" FontSize="10" Padding="3,0,0,0" VerticalOptions="Start" TextColor="White"/>
+        </StackLayout>
+
+
+        <Image Source="pixel1.png" Grid.Row="0" Grid.RowSpan="2" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill" ZIndex="-1"/>
+
         <ScrollView x:Name="scrollView" 
-            Grid.Row="0"
+            Grid.Row="1"
             ZIndex="1"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
         />
+        <Grid BackgroundColor="#C58AFF" Padding="0" HeightRequest="60" RowSpacing="0" Grid.Row="2" 
+ColumnDefinitions="*,*,*,*,*">
 
+            <Frame Padding="0" Grid.Column="0" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" BorderColor="Transparent">
+                <Grid>
+                    <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                    <Button x:Name="Button1" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                </Grid>
+
+            </Frame>
+            <Frame Padding="0" Grid.Column="1" CornerRadius="0" HorizontalOptions="Fill" VerticalOptions="Fill" BorderColor="Transparent">
+                <Grid>
+                    <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill"  VerticalOptions="Fill"/>
+                    <Image Source="icon.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button x:Name="Button2" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="Open_Gallery"/>
+                </Grid>
+
+            </Frame>
+            
+            <Frame Padding="0" Grid.Column="2" CornerRadius="0" BorderColor="Transparent">
+                <Grid>
+                    <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill"  VerticalOptions="Fill"/>
+                </Grid>
+            </Frame>
+            <Frame Padding="0" Grid.Column="3" CornerRadius="0" BorderColor="Transparent">
+                <Grid>
+                    <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                    <Image Source="pfeilschwarz.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Button x:Name="Button3" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                </Grid>
+
+            </Frame>
+            <Frame Padding="0" Grid.Column="4" CornerRadius="0" BorderColor="Transparent">
+                <Grid>
+                    <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                    <Button x:Name="Button4" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                </Grid>
+
+            </Frame>
+
+            <Frame Grid.Column="2" HeightRequest="110" WidthRequest="110"
+        BackgroundColor="Transparent" CornerRadius="40" HasShadow="False" BorderColor="Transparent"
+        VerticalOptions="Start" HorizontalOptions="Fill" TranslationY="-55">
+                <Grid>
+                    <Image Source="kreis.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                    <Image Source="camera.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center" TranslationY="-3"/>
+                </Grid>
+            </Frame>
+        </Grid>
 
     </Grid>
+
+
+
+
 </ContentPage>
