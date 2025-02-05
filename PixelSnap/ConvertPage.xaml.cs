@@ -1,5 +1,6 @@
 using Microsoft.Maui.Layouts;
 using SkiaSharp;
+using System.Reflection;
 
 namespace PixelSnap;
 
@@ -86,12 +87,13 @@ public partial class ConvertPage : ContentPage
     }
     private static string SaveImage(SKBitmap bitmap)
     {
-
-        string galleryPath = Path.Combine(FileSystem.AppDataDirectory, "gallery", "images");
+        string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string galleryPath = Path.Combine(exepath, "gallery", "images");
         Directory.CreateDirectory(galleryPath); // Ensure directory exists
 
-        string fileName = $"image_{DateTime.Now:yyyyMMdd_HHmmss}.jpg";
+        string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
         string imagePath = Path.Combine(galleryPath, fileName);
+        Console.WriteLine(imagePath);
         PixelArtConverter.SaveImage(bitmap, imagePath);
         return imagePath;
     }
