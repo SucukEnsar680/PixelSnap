@@ -47,13 +47,24 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Images\camera.png" />
+	  <None Remove="Resources\Images\icon.png" />
+	  <None Remove="Resources\Images\imageremovebg.png" />
+	  <None Remove="Resources\Images\kreis.png" />
+	  <None Remove="Resources\Images\pixel1.png" />
+	  <None Remove="Resources\Images\pixelsnap1.png" />
+	  <None Remove="Resources\Images\rectangle20.png" />
+	  <None Remove="Resources\Images\snap.png" />
+	  <None Remove="Resources\Images\upload.png" />
 	</ItemGroup>
 
 	<ItemGroup>
