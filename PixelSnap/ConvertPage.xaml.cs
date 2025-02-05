@@ -9,15 +9,14 @@ public partial class ConvertPage : ContentPage
     public ConvertPage()
     {
         InitializeComponent();
-        Draw(scrollView);
+        
     }
 
-    public void Draw(ScrollView galleryScrollView)
+    public void Draw(string ImagePath = "UploadFile.png", bool WithCam = false)
     {
-        string ImagePath = "UploadFile.png";
         double widthInLogicalUnits = DeviceDisplay.MainDisplayInfo.Width;
-        FlexLayout flexLayout = (FlexLayout)galleryScrollView.Content;
-        galleryScrollView.ZIndex = 0;
+        FlexLayout flexLayout = (FlexLayout)scrollView.Content;
+        scrollView.ZIndex = 0;
 
         if (flexLayout == null)
         {
@@ -28,7 +27,7 @@ public partial class ConvertPage : ContentPage
                 Wrap = FlexWrap.NoWrap,
                 Direction = FlexDirection.Column
             };
-            galleryScrollView.Content = flexLayout;
+            scrollView.Content = flexLayout;
         }
 
         Image image = new Image
@@ -42,18 +41,21 @@ public partial class ConvertPage : ContentPage
         };
 
         // Bildauswahl beim Antippen
-        image.GestureRecognizers.Add(new TapGestureRecognizer
+        if (!WithCam)
         {
-            Command = new Command(async () =>
+            image.GestureRecognizers.Add(new TapGestureRecognizer
             {
-                var file = await MediaPicker.PickPhotoAsync();
-                if (file != null)
+                Command = new Command(async () =>
                 {
-                    image.Source = ImageSource.FromFile(file.FullPath);
-                    ImagePath = file.FullPath;
-                }
-            })
-        });
+                    var file = await MediaPicker.PickPhotoAsync();
+                    if (file != null)
+                    {
+                        image.Source = ImageSource.FromFile(file.FullPath);
+                        ImagePath = file.FullPath;
+                    }
+                })
+            });
+        }
 
         flexLayout.Children.Add(image);
 
