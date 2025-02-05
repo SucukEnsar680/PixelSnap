@@ -56,6 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\blitz.png" />
 	  <None Remove="Resources\Images\camera.png" />
 	  <None Remove="Resources\Images\icon.png" />
 	  <None Remove="Resources\Images\imageremovebg.png" />
@@ -64,8 +65,10 @@
 	  <None Remove="Resources\Images\pixel1.png" />
 	  <None Remove="Resources\Images\pixelsnap1.png" />
 	  <None Remove="Resources\Images\rectangle20.png" />
+	  <None Remove="Resources\Images\schiessen.png" />
 	  <None Remove="Resources\Images\snap.png" />
 	  <None Remove="Resources\Images\upload.png" />
+	  <None Remove="Resources\Images\wechsel.png" />
 	</ItemGroup>
 
 	<ItemGroup>

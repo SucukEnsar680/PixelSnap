@@ -23,6 +23,10 @@ namespace PixelSnap
         {
             await Navigation.PushAsync(new ConvertPage());
         }
+        public async void Open_Camera(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new CameraViewPage(cameraProvider));
+        }
     }
 
 }
