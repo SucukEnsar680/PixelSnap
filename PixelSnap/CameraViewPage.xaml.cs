@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Core.Views;
 using CommunityToolkit.Maui.Views;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace PixelSnap
 {
@@ -14,6 +15,7 @@ namespace PixelSnap
         private double minValue;
         private double maxValue;
         private ICameraProvider cameraProvider;
+        private string Filepath;
         public CameraViewPage(ICameraProvider cameraProvider)
         {
             InitializeComponent();
@@ -40,22 +42,31 @@ namespace PixelSnap
             MyCamera.SelectedCamera = cameraProvider.AvailableCameras
                 .Where(c => c.Position == CameraPosition.Front).FirstOrDefault();
         }
-        private void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
+        private async void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
         {
-            if (Dispatcher.IsDispatchRequired)
+            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
+
+            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+            string imagePath = Path.Combine(galleryPath, fileName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create, FileAccess.Write))
             {
-                Dispatcher.Dispatch(() => MyImage.Source = ImageSource.FromStream(() => e.Media));
-                
-                return;
+                await e.Media.CopyToAsync(fileStream);
             }
-            MyImage.Source = ImageSource.FromStream(() => e.Media);
+            MyImage.Source = ImageSource.FromFile(imagePath);
+            Filepath = imagePath;
+            Console.WriteLine($"Image saved at: {imagePath}");
         }
+
         private async void TakePicture_Clicked(object sender, EventArgs e)
         {
             try
             {
                 await MyCamera.CaptureImage(CancellationToken.None);
-                //await Navigation.PushAsync(new ConvertPage());
+                ConvertPage page = new ConvertPage();
+                page.Draw(Filepath, true);
+                await Navigation.PushAsync(page);
 
             }
             catch (Exception ex)
