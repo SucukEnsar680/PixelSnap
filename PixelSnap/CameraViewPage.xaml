@@ -4,11 +4,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
-    <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,30,30">
-        <toolkit:CameraView 
-            Grid.ColumnSpan="3" 
-            Grid.Row="0" 
-            SelectedCamera="{Binding SelectedCamera}" />
+    <Grid ColumnDefinitions="*" RowDefinitions="400,90,90,90,90">
+        
+        <toolkit:CameraView Grid.Column="0" Grid.Row="0"
+            x:Name="MyCamera"
+            MediaCaptured="MyCamera_MediaCaptured"
+            
+            />
+        <Button x:Name="btnTakePicture" Text="Take Picture" Grid.Column="0" Grid.Row="1" Clicked="TakePicture_Clicked"/>
+        <Button Text="Flash" Grid.Column="0" Grid.Row="2" Clicked="Flash_Clicked"/>
+        <Button Text="Switch Camera" Grid.Column="0" Grid.Row="3" Clicked="SwitchCamera_Clicked"/>
+        <Slider x:Name="MySlider" Grid.Column="0" Grid.Row="4" Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"/>
+
     </Grid>
 
 </ContentPage>

@@ -1,10 +1,82 @@
+using CommunityToolkit.Maui.Camera;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Primitives;
+using CommunityToolkit.Maui.Core.Views;
+using CommunityToolkit.Maui.Views;
+using System.Linq.Expressions;
+
 namespace PixelSnap
 {
     public partial class CameraViewPage : ContentPage
     {
-        public CameraViewPage()
+        readonly string imagePath;
+        Image MyImage = new Image();
+        private double minValue;
+        private double maxValue;
+        private ICameraProvider cameraProvider;
+        public CameraViewPage(ICameraProvider cameraProvider)
         {
             InitializeComponent();
+            this.cameraProvider = cameraProvider;
+            MySlider.ValueChanged += Slider_ValueChanged;
+            minValue = 1; // Minimum zoom value of the selected camera
+            maxValue = 5; // Maximum zoom value of the selected camera
+            MySlider.Minimum = minValue;
+            MySlider.Maximum = maxValue;
+
         }
+
+        protected async override void OnNavigatedTo(NavigatedToEventArgs args)
+        {
+            base.OnNavigatedTo(args);
+            try
+            {
+                await cameraProvider.RefreshAvailableCameras(CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+            MyCamera.SelectedCamera = cameraProvider.AvailableCameras
+                .Where(c => c.Position == CameraPosition.Front).FirstOrDefault();
+        }
+        private void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
+        {
+            if (Dispatcher.IsDispatchRequired)
+            {
+                Dispatcher.Dispatch(() => MyImage.Source = ImageSource.FromStream(() => e.Media));
+                
+                return;
+            }
+            MyImage.Source = ImageSource.FromStream(() => e.Media);
+        }
+        private async void TakePicture_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                await MyCamera.CaptureImage(CancellationToken.None);
+                //await Navigation.PushAsync(new ConvertPage());
+
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }   
+
+        }
+
+        private void Flash_Clicked(object sender, EventArgs e)
+        {
+            MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
+        }
+        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            MyCamera.ZoomFactor = (float)MySlider.Value;
+        }
+        private void SwitchCamera_Clicked(object sender, EventArgs e)
+        {
+            MyCamera.SelectedCamera = MyCamera.SelectedCamera == cameraProvider.AvailableCameras[0] ? cameraProvider.AvailableCameras[1] : cameraProvider.AvailableCameras[0];
+        }
+
     }
 }
