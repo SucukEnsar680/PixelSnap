@@ -25,5 +25,12 @@
                Source="your_image_path_here.jpg"
                Aspect="AspectFit"
                VerticalOptions="Center" HorizontalOptions="Center" />
+        <Button Text="Teilen"
+                Clicked="OnShareButtonClicked"
+                BackgroundColor="Blue"
+                TextColor="White"
+                FontSize="18"
+                Padding="10"
+                Margin="10"/>
     </Grid>
 </ContentPage>
