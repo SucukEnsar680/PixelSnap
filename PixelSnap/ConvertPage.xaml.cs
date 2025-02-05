@@ -61,8 +61,9 @@ public partial class ConvertPage : ContentPage
         {
             Text = "Convert now",
             
-            WidthRequest = 950,
+            WidthRequest = 400,
             HeightRequest = 30,
+            FontSize = 10,
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center,
             BackgroundColor = Color.FromHex("#C58AFF"),
