@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace PixelSnap;
 
 public partial class Page_Gallery : ContentPage
@@ -5,14 +7,34 @@ public partial class Page_Gallery : ContentPage
 	public Page_Gallery()
 	{
 		InitializeComponent();
-        Image_Gal image = new Image_Gal("image1", "/storage/emulated/0/Download/image.jpg");
-        image.DrawImage(scrollView);
-        Image_Gal image1 = new Image_Gal("image1", "/storage/emulated/0/Download/image.jpg");
-        image1.DrawImage(scrollView);
-        Image_Gal image2 = new Image_Gal("image1", "C:/Users/thoma/OneDrive/Bilder/Screenshots/2023-11-12.png");
-        image2.DrawImage(scrollView);
-        Image_Gal image3 = new Image_Gal("image1", "C:/Users/thoma/OneDrive/Bilder/Screenshots/2023-11-12.png");
-        image3.DrawImage(scrollView);
+        LoadImagesFromGallery();
+    }
+    private void LoadImagesFromGallery()
+    {
+        string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string galleryPath = Path.Combine(exepath, "gallery", "images");
+        if (!Directory.Exists(galleryPath))
+        {
+            Console.WriteLine("Gallery folder does not exist.");
+            return;
+        }
+        string[] imagePaths = Directory.GetFiles(galleryPath, "*.*")
+            .Where(file => file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                           file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                           file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                           file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
+                           file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
 
+        if (imagePaths.Length == 0)
+        {
+            Console.WriteLine("No images found in the gallery.");
+            return;
+        }
+        foreach (var imagePath in imagePaths)
+        {
+            Image_Gal image = new Image_Gal(Path.GetFileName(imagePath), imagePath);
+            image.DrawImage(scrollView);
+        }
     }
 }

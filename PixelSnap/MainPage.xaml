@@ -28,7 +28,7 @@
                 <Grid>
                     <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill"  VerticalOptions="Fill"/>
                     <Image Source="icon.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button x:Name="Button2" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                    <Button x:Name="Button2" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="Open_Gallery"/>
                 </Grid>
 
             </Frame>
@@ -41,7 +41,7 @@
                 <Grid>
                     <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
                     <Image Source="upload.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    <Button x:Name="Button3" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                    <Button x:Name="Button3" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="Open_Converter"/>
                 </Grid>
 
             </Frame>

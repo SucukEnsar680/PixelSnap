@@ -67,7 +67,7 @@ public partial class ConvertPage : ContentPage
 
         button.Clicked += (sender, e) =>
         {
-            SKBitmap bitmap =  PixelArtConverter.ReduceColors(ImagePath,8);
+            SKBitmap bitmap =  PixelArtConverter.ReduceColors(ImagePath,16);
             string convImg = SaveImage(bitmap);
             Image image_con = new Image
             {
