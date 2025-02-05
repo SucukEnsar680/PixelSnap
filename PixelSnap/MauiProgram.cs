@@ -10,7 +10,7 @@ namespace PixelSnap
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<App>() 
                 .UseMauiCommunityToolkit()
                 .UseMauiCommunityToolkitCore()
                 .UseMauiCommunityToolkitCamera()

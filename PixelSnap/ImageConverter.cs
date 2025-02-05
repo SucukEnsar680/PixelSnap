@@ -37,43 +37,82 @@ namespace PixelSnap
         }
         public static SKBitmap ReduceColors(string path, int clusterCount)
         {
-            SKBitmap bitmap = LoadImage(path);
-            KMeans kMeans = new KMeans(clusterCount);
-            double[][] pixelData = new double[bitmap.Width * bitmap.Height][];
-            SKColor[] pixelColors = new SKColor[bitmap.Width * bitmap.Height];
-
-            int idx = 0;
-            for (int y = 0; y < bitmap.Height; y++)
+            try
             {
-                for (int x = 0; x < bitmap.Width; x++)
+                SKBitmap originalBitmap = LoadImage(path);
+
+                // 🔹 Limit large image size to 1024x1024 for performance
+                int maxSize = 1024;
+                int newWidth = originalBitmap.Width;
+                int newHeight = originalBitmap.Height;
+
+                if (newWidth > maxSize || newHeight > maxSize)
                 {
-                    SKColor color = bitmap.GetPixel(x, y);
-                    pixelColors[idx] = color;
-                    pixelData[idx] = new double[] { color.Red, color.Green, color.Blue };
-                    idx++;
+                    float scale = Math.Min((float)maxSize / newWidth, (float)maxSize / newHeight);
+                    newWidth = (int)(newWidth * scale);
+                    newHeight = (int)(newHeight * scale);
+                    originalBitmap = originalBitmap.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Medium);
                 }
-            }
-            KMeans kmeans = new KMeans(clusterCount);
-            KMeansClusterCollection clusters = kmeans.Learn(pixelData);
-            int[] labels = clusters.Decide(pixelData);
 
-            SKBitmap clusteredBitmap = new SKBitmap(bitmap.Width, bitmap.Height);
-            idx = 0;
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                for (int x = 0; x < bitmap.Width; x++)
+                int width = originalBitmap.Width;
+                int height = originalBitmap.Height;
+                SKBitmap clusteredBitmap = new SKBitmap(width, height);
+
+                // 🔹 Extract pixel data manually
+                SKColor[] pixels = new SKColor[width * height];
+                for (int y = 0; y < height; y++)
                 {
-                    int clusterIndex = labels[idx];
+                    for (int x = 0; x < width; x++)
+                    {
+                        pixels[y * width + x] = originalBitmap.GetPixel(x, y);
+                    }
+                }
+
+                // Convert pixel data into a jagged array for KMeans
+                double[][] pixelData = new double[pixels.Length][];
+                for (int i = 0; i < pixels.Length; i++)
+                {
+                    pixelData[i] = new double[] { pixels[i].Red, pixels[i].Green, pixels[i].Blue };
+                }
+
+                // 🔹 Perform K-Means clustering
+                KMeans kmeans = new KMeans(clusterCount)
+                {
+                    MaxIterations = 10,
+                    Tolerance = 0.05
+                };
+                KMeansClusterCollection clusters = kmeans.Learn(pixelData);
+                int[] labels = clusters.Decide(pixelData);
+
+                // 🔹 Function to ensure valid byte range (0-255)
+                byte Clamp(double value) => (byte)Math.Max(0, Math.Min(255, value));
+
+                // Assign clustered colors efficiently
+                for (int i = 0; i < pixels.Length; i++)
+                {
+                    int clusterIndex = labels[i];
                     double[] centroid = clusters.Centroids[clusterIndex];
-
-                    SKColor newColor = new SKColor((byte)centroid[0], (byte)centroid[1], (byte)centroid[2]);
-                    clusteredBitmap.SetPixel(x, y, newColor);
-                    idx++;
+                    pixels[i] = new SKColor(Clamp(centroid[0]), Clamp(centroid[1]), Clamp(centroid[2]));
                 }
-            }
-            return clusteredBitmap;
 
+                // 🔹 Set pixels to new bitmap efficiently
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        clusteredBitmap.SetPixel(x, y, pixels[y * width + x]);
+                    }
+                }
+
+                return clusteredBitmap;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return null; // Handle error gracefully
+            }
         }
+
 
 
     }
