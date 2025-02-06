@@ -10,6 +10,7 @@ namespace PixelSnap
 {
     public partial class CameraViewPage : ContentPage
     {
+        private bool isFlashOn = false;
         readonly string imagePath;
         Image MyImage = new Image();
         private double minValue;
@@ -21,11 +22,23 @@ namespace PixelSnap
             InitializeComponent();
             this.cameraProvider = cameraProvider;
             MySlider.ValueChanged += Slider_ValueChanged;
-            minValue = 1; // Minimum zoom value of the selected camera
-            maxValue = 5; // Maximum zoom value of the selected camera
+            minValue = 1; 
+            maxValue = 5; 
             MySlider.Minimum = minValue;
             MySlider.Maximum = maxValue;
+            UpdateFlashIcon();
 
+        }
+        private void Flash_Clicked(object sender, EventArgs e)
+        {
+            isFlashOn = !isFlashOn;
+            MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
+            UpdateFlashIcon();
+        }
+
+        private void UpdateFlashIcon()
+        {
+            FlashImage.Source = isFlashOn ? "blitzfill.png" : "blitz.png";
         }
 
         protected async override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -76,10 +89,7 @@ namespace PixelSnap
 
         }
 
-        private void Flash_Clicked(object sender, EventArgs e)
-        {
-            MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
-        }
+
         private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             MyCamera.ZoomFactor = (float)MySlider.Value;
