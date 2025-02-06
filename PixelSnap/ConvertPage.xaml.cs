@@ -7,6 +7,7 @@ namespace PixelSnap;
 public partial class ConvertPage : ContentPage
 {
     private Image image_con;
+    private int colorCount = 16;
     public ConvertPage(bool Withcam = false)
     {
         InitializeComponent();
@@ -76,12 +77,24 @@ public partial class ConvertPage : ContentPage
 
         button.Clicked += async (sender, e) =>
         {
+            if (ImagePath == "UploadFile.png")
+            {
+                await DisplayAlert("Error", "Please select an image first", "OK");
+                return;
+            }
             button.Text = "Konvertiere...";
             button.IsEnabled = false; // Button deaktivieren während der Konvertierung
-
+            if (txtInput.Text != null && int.TryParse(txtInput.Text, out int inputValue) && inputValue >= 2 && inputValue <= 256)
+            {
+                colorCount = inputValue;
+            }
+            else
+            {
+                await DisplayAlert("Info", "Accepted Values: 2-256; Image will contain 16 (standard) colors", "OK");
+            }
             await Task.Run(() =>
             {
-                SKBitmap bitmap = PixelArtConverter.ReduceColors(ImagePath, 16);
+                SKBitmap bitmap = PixelArtConverter.ReduceColors(ImagePath, colorCount);
                 string convImg = SaveImage(bitmap);
 
                 // UI-Update im Hauptthread

@@ -21,6 +21,12 @@
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
         />
+        <StackLayout Grid.Row="1" Margin="50" Orientation="Vertical" VerticalOptions="Start" HorizontalOptions="Start">
+            
+            <Label Text="Color Count:" Margin="10"/>
+            <Entry x:Name="txtInput" Placeholder="Valid: 2-256" WidthRequest="150" />
+        </StackLayout>
+
         <Grid BackgroundColor="#C58AFF" Padding="0" HeightRequest="60" RowSpacing="0" Grid.Row="2" 
 ColumnDefinitions="*,*,*,*,*">
 
