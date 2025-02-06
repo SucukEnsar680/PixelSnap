@@ -24,7 +24,7 @@
                 <Grid Background="Black" RowDefinitions="*,*">
                     <Image Source="schiessen.png" Grid.Row="0" Aspect="AspectFit" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="55" WidthRequest="55" Margin="0,17,0,0"/>
                     <Button x:Name="btnTakePicture" Grid.Row="0" Text="" Background="Transparent" Clicked="TakePicture_Clicked" HorizontalOptions="Fill" VerticalOptions="Fill" Margin="0,17,0,0"/>
-                    <Slider x:Name="MySlider"   Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"  Grid.Row="1" Margin="5,10,0,0"/>
+                    <Slider x:Name="MySlider"   Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"  Grid.Row="1" Margin="5,10,0,0" Background="#7F7F7F"/>
                 </Grid>
 
             </Frame>
