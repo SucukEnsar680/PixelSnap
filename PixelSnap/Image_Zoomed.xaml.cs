@@ -21,11 +21,6 @@ public partial class Image_Zoomed : ContentPage
         Navigation.PopAsync();
     }
 
-    public void OnMenuButtonClicked(object sender, EventArgs e)
-    {
-        Navigation.PopToRootAsync();
-    }
-
     public async void OnShareButtonClicked(object sender, EventArgs e)
     {
         await ShareImageAsync(Imagepath);

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Maui.Layouts;
+﻿using Microsoft.Maui.Layouts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +22,22 @@ namespace PixelSnap
         {
             double widthInLogicalUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
             double height = (widthInLogicalUnits) / 4 - 8;
-            FlexLayout flexLayout = (FlexLayout)galleryScrollView.Content;
+
+            // Verwende ein StackLayout statt FlexLayout
+            StackLayout stackLayout = (StackLayout)galleryScrollView.Content;
             galleryScrollView.ZIndex = 0;
 
-            if (flexLayout == null)
+            if (stackLayout == null)
             {
-                flexLayout = new FlexLayout
+                stackLayout = new StackLayout
                 {
-                    AlignItems = FlexAlignItems.Start,
-                    Wrap = FlexWrap.Wrap
+                    Spacing = 5, // Setze Abstand zwischen den Bildern
+                    Orientation = StackOrientation.Vertical
                 };
-                galleryScrollView.Content = flexLayout;
+                galleryScrollView.Content = stackLayout;
             }
 
+            // Erstelle ein Frame für jedes Bild
             Frame imageFrame = new Frame
             {
                 WidthRequest = height,
@@ -56,8 +58,11 @@ namespace PixelSnap
                 Aspect = Aspect.AspectFill,
             };
 
+            // Füge das Bild in das Frame ein und das Frame in das StackLayout
             imageFrame.Content = image;
-            flexLayout.Children.Add(imageFrame);
+            stackLayout.Children.Add(imageFrame);
+
+            // Füge eine Tap-Gesture hinzu, um das Bild in groß anzuzeigen
             imageFrame.GestureRecognizers.Add(new TapGestureRecognizer
             {
                 Command = new Command(async () =>
@@ -65,7 +70,7 @@ namespace PixelSnap
                     var navigation = Application.Current?.MainPage?.Navigation;
                     if (navigation != null)
                     {
-                        await navigation.PushAsync(new Image_Zoomed(ImagePath));
+                        await navigation.PushAsync(new Image_Zoomed(ImagePath), false);
                     }
                 })
             });

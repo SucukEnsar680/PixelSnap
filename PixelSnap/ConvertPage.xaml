@@ -48,7 +48,7 @@ ColumnDefinitions="*,*,*,*,*">
             <Frame Padding="0" Grid.Column="3" CornerRadius="0" BorderColor="Transparent">
                 <Grid>
                     <Image Source="pixelsnap1.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
-                    <Image Source="pfeilschwarz.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <Image Source="upload.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center"/>
                     <Button x:Name="Button3" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" />
                 </Grid>
 

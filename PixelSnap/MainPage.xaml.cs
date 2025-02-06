@@ -21,6 +21,10 @@ namespace PixelSnap
         }
         public async void Open_Converter(object sender, EventArgs e)
         {
+            await Navigation.PushAsync(new ConvertPage());
+        }
+        public async void Open_Camera(object sender, EventArgs e)
+        {
             await Navigation.PushAsync(new CameraViewPage(cameraProvider));
         }
     }

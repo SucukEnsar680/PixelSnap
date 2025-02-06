@@ -4,6 +4,7 @@ using CommunityToolkit.Maui.Core.Primitives;
 using CommunityToolkit.Maui.Core.Views;
 using CommunityToolkit.Maui.Views;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace PixelSnap
 {
@@ -14,6 +15,7 @@ namespace PixelSnap
         private double minValue;
         private double maxValue;
         private ICameraProvider cameraProvider;
+        private string Filepath;
         public CameraViewPage(ICameraProvider cameraProvider)
         {
             InitializeComponent();
@@ -40,29 +42,43 @@ namespace PixelSnap
             MyCamera.SelectedCamera = cameraProvider.AvailableCameras
                 .Where(c => c.Position == CameraPosition.Front).FirstOrDefault();
         }
-        private void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
+        private async void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
         {
-            if (Dispatcher.IsDispatchRequired)
+            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+            Directory.CreateDirectory(galleryPath);
+            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
+            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+            string imagePath = Path.Combine(galleryPath, fileName);
+            ConvertPage page = new ConvertPage(true);
+            Filepath = imagePath;
+            using (var fileStream = new FileStream(Filepath, FileMode.Create, FileAccess.Write))
             {
-                Dispatcher.Dispatch(() => MyImage.Source = ImageSource.FromStream(() => e.Media));
-                
-                return;
+                await e.Media.CopyToAsync(fileStream);
             }
-            MyImage.Source = ImageSource.FromStream(() => e.Media);
+            MyImage.Source = ImageSource.FromFile(Filepath);
         }
+
         private async void TakePicture_Clicked(object sender, EventArgs e)
         {
             try
             {
                 await MyCamera.CaptureImage(CancellationToken.None);
-                //await Navigation.PushAsync(new ConvertPage());
-
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
-            }   
-
+            }
+            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+            Directory.CreateDirectory(galleryPath);
+            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
+            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+            string imagePath = Path.Combine(galleryPath, fileName);
+            ConvertPage page = new ConvertPage(true);
+            Filepath = imagePath;
+            page.Draw(imagePath, true);
+            await Navigation.PushAsync(page);
         }
 
         private void Flash_Clicked(object sender, EventArgs e)
