@@ -135,7 +135,6 @@ public partial class ConvertPage : ContentPage
         string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         string galleryPath = Path.Combine(exepath, "gallery", "images");
         Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
-
         string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
         string imagePath = Path.Combine(galleryPath, fileName);
         Console.WriteLine(imagePath);

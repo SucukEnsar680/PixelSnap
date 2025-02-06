@@ -10,6 +10,7 @@ namespace PixelSnap
 {
     public partial class CameraViewPage : ContentPage
     {
+        private bool isFlashOn = false;
         readonly string imagePath;
         Image MyImage = new Image();
         private double minValue;
@@ -25,8 +26,10 @@ namespace PixelSnap
             maxValue = 5; // Maximum zoom value of the selected camera
             MySlider.Minimum = minValue;
             MySlider.Maximum = maxValue;
+            UpdateFlashIcon();
 
         }
+        
 
         protected async override void OnNavigatedTo(NavigatedToEventArgs args)
         {
@@ -44,20 +47,41 @@ namespace PixelSnap
         }
         private async void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
         {
-            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
-            Directory.CreateDirectory(galleryPath);
-            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
-            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
-            string imagePath = Path.Combine(galleryPath, fileName);
-            ConvertPage page = new ConvertPage(true);
-            Filepath = imagePath;
-            using (var fileStream = new FileStream(Filepath, FileMode.Create, FileAccess.Write))
+            try
             {
-                await e.Media.CopyToAsync(fileStream);
+                string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string galleryPath = Path.Combine(exepath, "gallery", "capturedimages");
+                Directory.CreateDirectory(galleryPath); // Nur einmal erstellen
+
+                string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+                string imagePath = Path.Combine(galleryPath, fileName);
+                Filepath = imagePath; // Hier einmal korrekt zuweisen
+
+                if (File.Exists(imagePath))
+                {
+                    throw new Exception("File already exists");
+                }
+
+                using (var fileStream = new FileStream(Filepath, FileMode.Create, FileAccess.Write))
+                {
+                    await e.Media.CopyToAsync(fileStream);
+                }
+
+                // UI im Hauptthread aktualisieren
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MyImage.Source = ImageSource.FromFile(Filepath);
+                    ConvertPage page = new ConvertPage(true);
+                    page.Draw(Filepath, true);
+                    Navigation.PushAsync(page);
+                });
             }
-            MyImage.Source = ImageSource.FromFile(Filepath);
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
         }
+
 
         private async void TakePicture_Clicked(object sender, EventArgs e)
         {
@@ -69,21 +93,18 @@ namespace PixelSnap
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
-            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
-            Directory.CreateDirectory(galleryPath);
-            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
-            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
-            string imagePath = Path.Combine(galleryPath, fileName);
-            ConvertPage page = new ConvertPage(true);
-            Filepath = imagePath;
-            page.Draw(imagePath, true);
-            await Navigation.PushAsync(page);
         }
 
         private void Flash_Clicked(object sender, EventArgs e)
         {
+            isFlashOn = !isFlashOn;
             MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
+            UpdateFlashIcon();
+        }
+
+        private void UpdateFlashIcon()
+        {
+            FlashImage.Source = isFlashOn ? "blitzfill.png" : "blitz.png";
         }
         private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
         {

@@ -25,6 +25,10 @@ public partial class Image_Zoomed : ContentPage
     {
         await ShareImageAsync(Imagepath);
     }
+    public async void OnDeleteButtonClicked(object sender, EventArgs e)
+    {
+        File.Delete(Imagepath);
+    }
 
     private async Task ShareImageAsync(string imagePath)
     {

@@ -23,18 +23,20 @@ namespace PixelSnap
             double widthInLogicalUnits = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
             double height = (widthInLogicalUnits) / 4 - 8;
 
-            // Verwende ein StackLayout statt FlexLayout
-            StackLayout stackLayout = (StackLayout)galleryScrollView.Content;
+            // Verwende FlexLayout anstelle von StackLayout
+            var flexLayout = galleryScrollView.Content as FlexLayout;
             galleryScrollView.ZIndex = 0;
 
-            if (stackLayout == null)
+            if (flexLayout == null)
             {
-                stackLayout = new StackLayout
+                flexLayout = new FlexLayout
                 {
-                    Spacing = 5, // Setze Abstand zwischen den Bildern
-                    Orientation = StackOrientation.Vertical
+                    AlignItems = FlexAlignItems.Center,
+                    JustifyContent = FlexJustify.Start,
+                    Wrap = FlexWrap.Wrap,
+                    Direction = FlexDirection.Row
                 };
-                galleryScrollView.Content = stackLayout;
+                galleryScrollView.Content = flexLayout;
             }
 
             // Erstelle ein Frame für jedes Bild
@@ -58,9 +60,9 @@ namespace PixelSnap
                 Aspect = Aspect.AspectFill,
             };
 
-            // Füge das Bild in das Frame ein und das Frame in das StackLayout
+            // Füge das Bild in das Frame ein und das Frame in das FlexLayout
             imageFrame.Content = image;
-            stackLayout.Children.Add(imageFrame);
+            flexLayout.Children.Add(imageFrame);
 
             // Füge eine Tap-Gesture hinzu, um das Bild in groß anzuzeigen
             imageFrame.GestureRecognizers.Add(new TapGestureRecognizer
