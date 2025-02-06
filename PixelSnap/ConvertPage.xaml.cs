@@ -96,6 +96,11 @@ public partial class ConvertPage : ContentPage
 
                     button.Text = "Convert now"; // Button-Text zurücksetzen
                     button.IsEnabled = true; // Button wieder aktivieren
+                    if (WithCam)
+                    {
+                        File.Delete(ImagePath);
+                    }
+
                 });
             });
         };

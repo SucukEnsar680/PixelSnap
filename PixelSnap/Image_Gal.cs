@@ -65,7 +65,7 @@ namespace PixelSnap
                     var navigation = Application.Current?.MainPage?.Navigation;
                     if (navigation != null)
                     {
-                        await navigation.PushAsync(new Image_Zoomed(ImagePath));
+                        await navigation.PushAsync(new Image_Zoomed(ImagePath),false);
                     }
                 })
             });
