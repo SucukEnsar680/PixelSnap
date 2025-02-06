@@ -6,10 +6,14 @@ namespace PixelSnap;
 
 public partial class ConvertPage : ContentPage
 {
-    public ConvertPage()
+    private Image image_con;
+    public ConvertPage(bool Withcam = false)
     {
         InitializeComponent();
-        
+        if (Withcam != true)
+        {
+            Draw();
+        }
     }
 
     public void Draw(string ImagePath = "UploadFile.png", bool WithCam = false)
@@ -50,13 +54,13 @@ public partial class ConvertPage : ContentPage
                     var file = await MediaPicker.PickPhotoAsync();
                     if (file != null)
                     {
-                        image.Source = ImageSource.FromFile(file.FullPath);
                         ImagePath = file.FullPath;
+                        image.Source = ImageSource.FromFile(file.FullPath);
                     }
                 })
             });
         }
-
+        else { image.Source = ImagePath; }
         flexLayout.Children.Add(image);
 
         Button button = new Button
@@ -83,7 +87,13 @@ public partial class ConvertPage : ContentPage
                 // UI-Update im Hauptthread
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Image image_con = new Image
+                    if (image_con != null)
+                    {
+                        flexLayout.Children.Remove(image_con);
+                    }
+
+                    // Neues konvertiertes Bild hinzufügen
+                    image_con = new Image
                     {
                         Source = ImageSource.FromFile(convImg),
                         WidthRequest = double.NaN,
@@ -98,14 +108,26 @@ public partial class ConvertPage : ContentPage
                     button.IsEnabled = true; // Button wieder aktivieren
                     if (WithCam)
                     {
-                        File.Delete(ImagePath);
                     }
 
                 });
             });
         };
-
         flexLayout.Children.Add(button);
+        string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+        if (Directory.Exists(galleryPath))
+        {
+            try
+            {
+                Directory.Delete(galleryPath, true); // Rekursives Löschen
+                Console.WriteLine($"Gelöscht: {galleryPath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fehler beim Löschen des Ordners: {ex.Message}");
+            }
+        }
     }
 
     private static string SaveImage(SKBitmap bitmap)

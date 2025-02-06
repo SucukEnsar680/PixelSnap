@@ -10,7 +10,6 @@ namespace PixelSnap
 {
     public partial class CameraViewPage : ContentPage
     {
-        private bool isFlashOn = false;
         readonly string imagePath;
         Image MyImage = new Image();
         private double minValue;
@@ -22,23 +21,11 @@ namespace PixelSnap
             InitializeComponent();
             this.cameraProvider = cameraProvider;
             MySlider.ValueChanged += Slider_ValueChanged;
-            minValue = 1; 
-            maxValue = 5; 
+            minValue = 1; // Minimum zoom value of the selected camera
+            maxValue = 5; // Maximum zoom value of the selected camera
             MySlider.Minimum = minValue;
             MySlider.Maximum = maxValue;
-            UpdateFlashIcon();
 
-        }
-        private void Flash_Clicked(object sender, EventArgs e)
-        {
-            isFlashOn = !isFlashOn;
-            MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
-            UpdateFlashIcon();
-        }
-
-        private void UpdateFlashIcon()
-        {
-            FlashImage.Source = isFlashOn ? "blitzfill.png" : "blitz.png";
         }
 
         protected async override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -55,51 +42,49 @@ namespace PixelSnap
             MyCamera.SelectedCamera = cameraProvider.AvailableCameras
                 .Where(c => c.Position == CameraPosition.Front).FirstOrDefault();
         }
+        private async void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
+        {
+            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+            Directory.CreateDirectory(galleryPath);
+            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
+            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+            string imagePath = Path.Combine(galleryPath, fileName);
+            ConvertPage page = new ConvertPage(true);
+            Filepath = imagePath;
+            using (var fileStream = new FileStream(Filepath, FileMode.Create, FileAccess.Write))
+            {
+                await e.Media.CopyToAsync(fileStream);
+            }
+            MyImage.Source = ImageSource.FromFile(Filepath);
+        }
 
         private async void TakePicture_Clicked(object sender, EventArgs e)
         {
             try
             {
                 await MyCamera.CaptureImage(CancellationToken.None);
-                // Das `MediaCaptured`-Event wird automatisch ausgelöst
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
             }
+            string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string galleryPath = Path.Combine(exepath, "gallery", "caputredimages");
+            Directory.CreateDirectory(galleryPath);
+            Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
+            string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
+            string imagePath = Path.Combine(galleryPath, fileName);
+            ConvertPage page = new ConvertPage(true);
+            Filepath = imagePath;
+            page.Draw(imagePath, true);
+            await Navigation.PushAsync(page);
         }
-        private async void MyCamera_MediaCaptured(object sender, MediaCapturedEventArgs e)
+
+        private void Flash_Clicked(object sender, EventArgs e)
         {
-            try
-            {
-                string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string galleryPath = Path.Combine(exepath, "gallery", "capturedimages");
-                Directory.CreateDirectory(galleryPath); // Ordner sicherstellen
-
-                string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
-                string imagePath = Path.Combine(galleryPath, fileName);
-
-                using (var fileStream = new FileStream(imagePath, FileMode.Create, FileAccess.Write))
-                {
-                    await e.Media.CopyToAsync(fileStream);
-                }
-
-                this.Filepath = imagePath;
-                Console.WriteLine($"Image saved at: {imagePath}");
-
-                // Navigiere zur ConvertPage mit dem gespeicherten Bild
-                ConvertPage page = new ConvertPage();
-                page.Draw(Filepath, true);
-                await Navigation.PushAsync(page);
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
+            MyCamera.CameraFlashMode = MyCamera.CameraFlashMode == CameraFlashMode.Off ? CameraFlashMode.On : CameraFlashMode.Off;
         }
-
-
-
         private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             MyCamera.ZoomFactor = (float)MySlider.Value;
