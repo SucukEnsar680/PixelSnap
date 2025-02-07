@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core;
 using Microsoft.Maui.Layouts;
 using SkiaSharp;
 using System.Reflection;
@@ -8,13 +9,20 @@ public partial class ConvertPage : ContentPage
 {
     private Image image_con;
     private int colorCount = 16;
-    public ConvertPage(bool Withcam = false)
+    ICameraProvider cameraProvider;
+    public ConvertPage(ICameraProvider cameraProvider, bool Withcam = false)
     {
         InitializeComponent();
         if (Withcam != true)
         {
             Draw();
         }
+        this.cameraProvider = cameraProvider;
+    }
+
+    public async void Open_Camera(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CameraViewPage(cameraProvider));
     }
 
     public void Draw(string ImagePath = "UploadFile.png", bool WithCam = false)
@@ -148,7 +156,6 @@ public partial class ConvertPage : ContentPage
         string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         string galleryPath = Path.Combine(exepath, "gallery", "images");
         Directory.CreateDirectory(galleryPath); // Sicherstellen, dass der Ordner existiert
-
         string fileName = $"image_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.jpg";
         string imagePath = Path.Combine(galleryPath, fileName);
         Console.WriteLine(imagePath);
