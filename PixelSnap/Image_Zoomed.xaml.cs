@@ -39,7 +39,7 @@ public partial class Image_Zoomed : ContentPage
             {
                 await DisplayAlert("Error", "File not found.", "OK");
             }
-            Page_Gallery gal = new Page_Gallery();
+            MainPage gal = new MainPage();
             gal.LoadImagesFromGallery();
             Navigation.InsertPageBefore(gal, this);
             await Navigation.PopAsync();

@@ -74,6 +74,7 @@ ColumnDefinitions="*,*,*,*,*">
                 <Grid>
                     <Image Source="kreis.png" Aspect="AspectFill" HorizontalOptions="Fill" VerticalOptions="Fill"/>
                     <Image Source="camera.png" HeightRequest="40" WidthRequest="45" HorizontalOptions="Center" VerticalOptions="Center" TranslationY="-3"/>
+                    <Button x:Name="Button5" Text="" BackgroundColor="Transparent" BorderColor="Transparent" HorizontalOptions="Fill" VerticalOptions="Fill" Clicked="Open_Camera"/>
                 </Grid>
             </Frame>
         </Grid>

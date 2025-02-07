@@ -71,7 +71,7 @@ namespace PixelSnap
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     MyImage.Source = ImageSource.FromFile(Filepath);
-                    ConvertPage page = new ConvertPage(true);
+                    ConvertPage page = new ConvertPage(cameraProvider, true);
                     page.Draw(Filepath, true);
                     Navigation.PushAsync(page);
                 });

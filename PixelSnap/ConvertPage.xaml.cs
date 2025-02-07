@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Core;
 using Microsoft.Maui.Layouts;
 using SkiaSharp;
 using System.Reflection;
@@ -8,13 +9,20 @@ public partial class ConvertPage : ContentPage
 {
     private Image image_con;
     private int colorCount = 16;
-    public ConvertPage(bool Withcam = false)
+    ICameraProvider cameraProvider;
+    public ConvertPage(ICameraProvider cameraProvider, bool Withcam = false)
     {
         InitializeComponent();
         if (Withcam != true)
         {
             Draw();
         }
+        this.cameraProvider = cameraProvider;
+    }
+
+    public async void Open_Camera(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CameraViewPage(cameraProvider));
     }
 
     public void Draw(string ImagePath = "UploadFile.png", bool WithCam = false)
