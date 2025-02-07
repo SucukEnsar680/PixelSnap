@@ -19,12 +19,12 @@
             <Button x:Name="Button_GoBack" Grid.Row="0" Grid.Column="0" Text="←" 
                  VerticalOptions="Start" HorizontalOptions="Start"
                  Clicked="OnBackButtonClicked" />
+            <Button Text="Löschen"
+                Clicked="OnDeleteButtonClicked" Margin="5,0,0,5"
+                FontSize="18"/>
             <Button Text="Teilen"
                 Clicked="OnShareButtonClicked" Margin="5,0,0,5"
                 FontSize="18"/>
-            <Button Text="Löschen"
-                Clicked="OnDeleteButtonClicked" Margin="5,0,0,5"
-                FontSize="18"/> 
         </StackLayout>
         
         <Image x:Name="ZoomedImage" Grid.Row="1" Grid.ColumnSpan="3" 
