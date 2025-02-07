@@ -15,18 +15,24 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center">
-            <Button x:Name="Button_GoBack" Grid.Row="0" Grid.Column="0" Text="←" 
-                 VerticalOptions="Start" HorizontalOptions="Start"
-                 Clicked="OnBackButtonClicked" />
+        <StackLayout Orientation="Horizontal" 
+             Grid.Row="0" Grid.ColumnSpan="3" 
+             HorizontalOptions="FillAndExpand" 
+             VerticalOptions="Start">
+            <Button x:Name="Button_GoBack" Text="←" 
+            Clicked="OnBackButtonClicked" />
             <Button Text="Teilen"
-                Clicked="OnShareButtonClicked" Margin="5,0,0,5"
-                FontSize="18"/>
+            Clicked="OnShareButtonClicked" 
+            Margin="5,0,0,5"
+            FontSize="18"/>
             <Button Text="Löschen"
-                Clicked="OnDeleteButtonClicked" Margin="5,0,0,5"
-                FontSize="18"/> 
+            x:Name="DeleteButton"
+            Clicked="OnDeleteButtonClicked"
+            Margin="5,0,0,5"
+            FontSize="18"/>
         </StackLayout>
-        
+
+
         <Image x:Name="ZoomedImage" Grid.Row="1" Grid.ColumnSpan="3" 
                Source="your_image_path_here.jpg"
                Aspect="AspectFit"

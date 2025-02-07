@@ -9,7 +9,7 @@ public partial class Page_Gallery : ContentPage
 		InitializeComponent();
         LoadImagesFromGallery();
     }
-    private void LoadImagesFromGallery()
+    public void LoadImagesFromGallery()
     {
         string exepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         string galleryPath = Path.Combine(exepath, "gallery", "images");
@@ -37,4 +37,5 @@ public partial class Page_Gallery : ContentPage
             image.DrawImage(scrollView);
         }
     }
+
 }

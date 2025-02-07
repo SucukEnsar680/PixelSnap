@@ -27,6 +27,7 @@ namespace PixelSnap
         {
             await Navigation.PushAsync(new CameraViewPage(cameraProvider));
         }
+
     }
 
 }

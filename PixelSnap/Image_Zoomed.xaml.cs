@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Core;
+
 namespace PixelSnap;
 
 public partial class Image_Zoomed : ContentPage
@@ -27,8 +29,27 @@ public partial class Image_Zoomed : ContentPage
     }
     public async void OnDeleteButtonClicked(object sender, EventArgs e)
     {
-        File.Delete(Imagepath);
+        try
+        {
+            if (File.Exists(Imagepath))
+            {
+                File.Delete(Imagepath);
+            }
+            else
+            {
+                await DisplayAlert("Error", "File not found.", "OK");
+            }
+            Page_Gallery gal = new Page_Gallery();
+            gal.LoadImagesFromGallery();
+            Navigation.InsertPageBefore(gal, this);
+            await Navigation.PopAsync();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Could not delete image: {ex.Message}", "OK");
+        }
     }
+
 
     private async Task ShareImageAsync(string imagePath)
     {
